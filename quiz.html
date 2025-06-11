@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Quiz</title>
+  <style>
+    body {
+      font-family: sans-serif;
+      max-width: 600px;
+      margin: 40px auto;
+      padding: 20px;
+    }
+    #quiz-container {
+      border: 1px solid #ddd;
+      padding: 20px;
+      border-radius: 8px;
+    }
+    .answer-btn {
+      display: block;
+      margin: 10px 0;
+      padding: 10px;
+      background: #e0e0e0;
+      border: none;
+      width: 100%;
+      cursor: pointer;
+      border-radius: 4px;
+      transition: background-color 0.2s;
+    }
+    .answer-btn:hover {
+      background: #d0d0d0;
+    }
+    #result {
+      font-size: 1.1em;
+      font-weight: bold;
+      margin-top: 20px;
+    }
+    #quiz-link-container {
+      text-align: center;
+      margin-top: 20px;
+      display: none;
+    }
+    .quiz-link-button {
+      display: inline-block;
+      padding: 10px 20px;
+      background-color: #005eb8;
+      color: white;
+      text-decoration: none;
+      font-weight: bold;
+      border-radius: 4px;
+      transition: background-color 0.3s;
+    }
+    .quiz-link-button:hover {
+      background-color: #004a91;
+    }
+  </style>
+</head>
+<body>
+
+<div id="quiz-container">
+  <h2 id="question"></h2>
+  <div id="answers"></div>
+  <p id="result" style="display:none;"></p>
+  <div id="quiz-link-container">
+    <a href="https://www.handelsblatt.com/" target="_blank" class="quiz-link-button">
+      Mehr zum Thema lesen
+    </a>
+  </div>
+</div>
+
+<script>
+const quizData = [
+  {
+    question: "Wie heißt der aktuelle Präsident der USA?",
+    answers: ["Donald Trump", "G.W. Bush", "Bill Clinton"],
+    correct: "Donald Trump"
+  },
+  {
+    question: "Wann begann die Russische Invasion in der Ukraine?",
+    answers: ["Februar 2021", "Januar 2022", "Februar 2022"],
+    correct: "Februar 2022"
+  },
+  {
+    question: "Welcher große deutsche Konzern flog aus dem Dax, nachdem es einen großen Skandal um falsche Bilanzen gab?",
+    answers: ["K+S", "Deutsche Telekom", "Wirecard"],
+    correct: "Wirecard"
+  }
+];
+
+let currentQuestion = 0;
+let score = 0;
+
+const questionEl = document.getElementById("question");
+const answersEl = document.getElementById("answers");
+const resultEl = document.getElementById("result");
+const linkContainer = document.getElementById("quiz-link-container");
+
+function loadQuestion() {
+  const q = quizData[currentQuestion];
+  questionEl.textContent = q.question;
+  answersEl.innerHTML = "";
+
+  q.answers.forEach(answer => {
+    const btn = document.createElement("button");
+    btn.textContent = answer;
+    btn.classList.add("answer-btn");
+    btn.onclick = () => {
+      if (answer === q.correct) score++;
+      currentQuestion++;
+      if (currentQuestion < quizData.length) {
+        loadQuestion();
+      } else {
+        showResult();
+      }
+    };
+    answersEl.appendChild(btn);
+  });
+}
+
+function showResult() {
+  questionEl.style.display = "none";
+  answersEl.style.display = "none";
+  resultEl.style.display = "block";
+  resultEl.textContent = `Du hast ${score} von ${quizData.length} Fragen richtig beantwortet.`;
+  linkContainer.style.display = "block";
+}
+
+loadQuestion();
+</script>
+
+</body>
+</html>
